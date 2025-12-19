@@ -33,12 +33,11 @@ export const sessionId =
 // VERSION HISTORY (GET)
 // =======================
 export async function getVersionHistory() {
-  const res = await fetch(`${VERSIONS_URL}/${sessionId}`);
+  const res = await fetch(VERSIONS_URL);
   if (!res.ok) return [];
   const data = await res.json();
-  return data.history ?? [];
+  return data.versions ?? [];
 }
-
 
 // =======================
 // SAVE VERSION (POST)
@@ -56,6 +55,7 @@ export async function saveVersion(snapshot) {
   if (!res.ok) throw new Error("Save version failed");
   return res.json();
 }
+
 
 
 
