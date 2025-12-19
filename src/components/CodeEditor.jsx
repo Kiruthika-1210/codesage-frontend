@@ -7,26 +7,22 @@ function CodeEditor({
     code,
     onCodeChange,
     onAnalyze,
-    onRefactor,
-    onFullPipeline,
-    onGenerateTests,
 }) {
     const fileInputRef = useRef(null);
 
     // When user edits code in CodeMirror
     function handleEditorChange(value) {
-        onCodeChange(value);   // send to Home.jsx
+        onCodeChange(value);
     }
 
-    // File upload logic (Step 4)
+    // File upload logic
     function handleFileSelected(event) {
         const file = event.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = (e) => {
-            const text = e.target.result;
-            onCodeChange(text); // send file text to Home.jsx
+            onCodeChange(e.target.result);
         };
         reader.readAsText(file);
     }
@@ -36,26 +32,12 @@ function CodeEditor({
 
             {/* Toolbar */}
             <div className="flex justify-between items-center bg-[#1a1a1d] p-4 rounded-xl border border-[#262629]">
-                
-                {/* Buttons */}
-                <div className="flex gap-4">
 
+                {/* Analyze Button */}
+                <div className="flex gap-4">
                     <button onClick={onAnalyze} className="btn">
                         Analyze
                     </button>
-
-                    <button onClick={onRefactor} className="btn">
-                        Refactor
-                    </button>
-
-                    <button onClick={onFullPipeline} className="btn">
-                        Full Pipeline
-                    </button>
-
-                    <button onClick={onGenerateTests} className="btn">
-                        Generate Tests
-                    </button>
-
                 </div>
 
                 {/* Upload Button */}
