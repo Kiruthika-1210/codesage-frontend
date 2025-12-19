@@ -5,7 +5,7 @@ const BASE_URL =
    ANALYZE
 ========================= */
 export async function analyzeCode(code) {
-  const res = await fetch(`${BASE_URL}/server/analyze`, {
+  const res = await fetch(`${BASE_URL}/server/analyze/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ code }),
@@ -52,3 +52,4 @@ export async function getVersionHistory() {
 
   return res.json(); // { versions: [...] }
 }
+
