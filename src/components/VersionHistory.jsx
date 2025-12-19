@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-import { getVersionDetails } from "../utils/api";
 
-function VersionHistory({
-  versions,
-  onSaveVersion,
-  onDeleteVersion,
-  onClearAll,
-  canSave,
-}) {
+function VersionHistory({ versions, onSaveVersion, canSave }) {
   const [selectedVersion, setSelectedVersion] = useState(null);
 
   return (
@@ -22,33 +15,18 @@ function VersionHistory({
           </span>
         </h2>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onClearAll}
-            disabled={versions.length === 0}
-            className={`px-3 py-1 rounded-lg text-sm font-medium transition
-              ${
-                versions.length
-                  ? "text-red-400 border border-red-400/60 hover:bg-red-400/10"
-                  : "text-neutral-500 border border-neutral-700 cursor-not-allowed"
-              }`}
-          >
-             Clear All
-          </button>
-
-          <button
-            onClick={onSaveVersion}
-            disabled={!canSave}
-            className={`px-4 py-1 rounded-lg text-sm font-medium transition
-              ${
-                canSave
-                  ? "text-black bg-yellow-500 hover:bg-yellow-400"
-                  : "bg-neutral-700 text-neutral-400 cursor-not-allowed"
-              }`}
-          >
-             Save Version
-          </button>
-        </div>
+        <button
+          onClick={onSaveVersion}
+          disabled={!canSave}
+          className={`px-4 py-1 rounded-lg text-sm font-medium transition
+            ${
+              canSave
+                ? "text-black bg-yellow-500 hover:bg-yellow-400"
+                : "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+            }`}
+        >
+          Save Version
+        </button>
       </div>
 
       {/* TIMELINE */}
@@ -65,33 +43,24 @@ function VersionHistory({
               <div>
                 <p className="font-medium text-gray-200">v{index + 1}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(version.created_at).toLocaleString()}
+                  {new Date(version.created_time).toLocaleString()}
                 </p>
+
+                {version.regression && (
+                  <p className="text-sm text-red-400 mt-1">
+                    ⚠ Regression detected
+                  </p>
+                )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => onDeleteVersion(version.version_id)}
-                  className="text-red-400 hover:text-red-300"
-                  title="Delete version"
-                >
-                  🗑️
-                </button>
-
-                <button
-                  onClick={async () => {
-                    const fullVersion = await getVersionDetails(
-                      version.version_id
-                    );
-                    setSelectedVersion(fullVersion);
-                  }}
-                  className="px-4 py-1 rounded-lg text-sm font-medium
-                             text-[#d4a44d] border border-[#d4a44d]/60
-                             hover:bg-black transition"
-                >
-                  View Details
-                </button>
-              </div>
+              <button
+                onClick={() => setSelectedVersion(version)}
+                className="px-4 py-1 rounded-lg text-sm font-medium
+                           text-[#d4a44d] border border-[#d4a44d]/60
+                           hover:bg-black transition"
+              >
+                View Details
+              </button>
             </div>
           ))}
         </div>
@@ -105,7 +74,6 @@ function VersionHistory({
                           rounded-2xl shadow-2xl
                           max-h-[80vh] flex flex-col">
 
-            {/* Header */}
             <div className="flex justify-between items-center px-6 py-4 border-b border-[#1a1a1d]">
               <h3 className="text-lg font-semibold text-[#d4a44d]">
                 Version Details
@@ -118,38 +86,29 @@ function VersionHistory({
               </button>
             </div>
 
-            {/* Scrollable content */}
             <div className="px-6 py-4 overflow-y-auto">
 
-              {/* Code Snapshot */}
+              {/* Code */}
               <div className="mb-4">
                 <p className="text-gray-400 mb-1">Code Snapshot</p>
                 <pre className="bg-[#101012] border border-[#1f1f22]
                                 rounded-lg p-4 text-sm text-gray-300
                                 max-h-[220px] overflow-y-auto">
-{selectedVersion.refactored_code ??
- selectedVersion.original_code ??
- "—"}
+{selectedVersion.code}
                 </pre>
               </div>
 
               {/* Issues */}
               <div className="mb-4">
                 <p className="text-gray-400 mb-1">Issues</p>
-                {selectedVersion.issues?.length === 0 ? (
+                {selectedVersion.issue_count === 0 ? (
                   <p className="text-green-400 text-sm">No issues</p>
                 ) : (
-                  <ul className="list-disc list-inside text-sm text-gray-300">
-                    {selectedVersion.issues?.map((issue, idx) => (
-                      <li key={idx}>
-                        {issue.type} — {issue.message}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-sm text-gray-300">
+                    {selectedVersion.issue_count} issues detected
+                  </p>
                 )}
               </div>
-
-              <hr className="my-4 border-[#1f1f22]" />
 
               {/* Diff */}
               <div>
