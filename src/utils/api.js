@@ -1,8 +1,9 @@
 const ANALYZE_URL =
-  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/analyze/";
+  "https://909292301.catalystserverless.in/serverless/analyze";
 
 const VERSIONS_URL =
-  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/versions";
+  "https://909292301.catalystserverless.in/serverless/versions";
+
 
 // =======================
 // ANALYZE CODE
@@ -17,6 +18,16 @@ export async function analyzeCode(code) {
   if (!res.ok) throw new Error("Analyze failed");
   return await res.json();
 }
+
+// SESSION_ID
+export const sessionId =
+  localStorage.getItem("codesage_session") ??
+  (() => {
+    const id = crypto.randomUUID();
+    localStorage.setItem("codesage_session", id);
+    return id;
+  })();
+
 
 // =======================
 // VERSION HISTORY (GET)
@@ -45,5 +56,6 @@ export async function saveVersion(snapshot) {
   if (!res.ok) throw new Error("Save version failed");
   return res.json();
 }
+
 
 
