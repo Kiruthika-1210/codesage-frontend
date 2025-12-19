@@ -1,4 +1,3 @@
-// -------- ANALYZE CODE --------
 export async function analyzeCode(code) {
   const res = await fetch("/api/analyze", {
     method: "POST",
@@ -6,26 +5,16 @@ export async function analyzeCode(code) {
     body: JSON.stringify({ code }),
   });
 
-  if (!res.ok) {
-    throw new Error("Analyze failed");
-  }
-
+  if (!res.ok) throw new Error("Analyze failed");
   return res.json();
 }
 
-// -------- VERSION HISTORY (GET) --------
 export async function getVersionHistory() {
   const res = await fetch("/api/versions");
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch version history");
-  }
-
-  const data = await res.json();
-  return data.versions ?? [];
+  if (!res.ok) throw new Error("History failed");
+  return res.json();
 }
 
-// -------- SAVE VERSION (POST) --------
 export async function saveVersion(snapshot) {
   const res = await fetch("/api/versions", {
     method: "POST",
@@ -33,9 +22,6 @@ export async function saveVersion(snapshot) {
     body: JSON.stringify(snapshot),
   });
 
-  if (!res.ok) {
-    throw new Error("Save version failed");
-  }
-
+  if (!res.ok) throw new Error("Save failed");
   return res.json();
 }
