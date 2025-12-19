@@ -1,11 +1,6 @@
-const BASE_URL =
-  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com";
-
-// =======================
-// ANALYZE CODE
-// =======================
+// -------- ANALYZE CODE --------
 export async function analyzeCode(code) {
-  const res = await fetch(`${BASE_URL}/server/analyze/`, {
+  const res = await fetch("/api/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ code }),
@@ -18,11 +13,9 @@ export async function analyzeCode(code) {
   return res.json();
 }
 
-// =======================
-// VERSION HISTORY (GET)
-// =======================
+// -------- VERSION HISTORY (GET) --------
 export async function getVersionHistory() {
-  const res = await fetch(`${BASE_URL}/server/versions`);
+  const res = await fetch("/api/versions");
 
   if (!res.ok) {
     throw new Error("Failed to fetch version history");
@@ -32,11 +25,9 @@ export async function getVersionHistory() {
   return data.versions ?? [];
 }
 
-// =======================
-// SAVE VERSION (POST)
-// =======================
+// -------- SAVE VERSION (POST) --------
 export async function saveVersion(snapshot) {
-  const res = await fetch(`${BASE_URL}/server/versions`, {
+  const res = await fetch("/api/versions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(snapshot),
