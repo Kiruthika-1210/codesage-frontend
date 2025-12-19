@@ -1,11 +1,7 @@
-// =======================
-// GET VERSION HISTORY
-// =======================
 export async function GET() {
   try {
     const res = await fetch(
-      "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/versions",
-      { method: "GET" }
+      "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/versions"
     );
 
     const data = await res.json();
@@ -23,10 +19,6 @@ export async function GET() {
   }
 }
 
-
-// =======================
-// SAVE VERSION
-// =======================
 export async function POST(req) {
   try {
     const body = await req.json();
