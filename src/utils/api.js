@@ -1,8 +1,8 @@
 const ANALYZE_URL =
-  "https://909292301.catalystserverless.in/serverless/analyze";
+  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/analyze/";
 
 const VERSIONS_URL =
-  "https://909292301.catalystserverless.in/serverless/versions";
+  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/versions";
 
 
 // =======================
@@ -56,6 +56,7 @@ export async function saveVersion(snapshot) {
   if (!res.ok) throw new Error("Save version failed");
   return res.json();
 }
+
 
 
 
