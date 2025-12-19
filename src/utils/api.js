@@ -1,40 +1,33 @@
-const ANALYZE_URL =
-  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/analyze/";
-
-const VERSIONS_URL =
-  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/versions";
-
+const BASE_URL =
+  "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com";
 
 // =======================
 // ANALYZE CODE
 // =======================
 export async function analyzeCode(code) {
-  const res = await fetch(ANALYZE_URL, {
+  const res = await fetch(`${BASE_URL}/server/analyze/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ code }),
   });
 
-  if (!res.ok) throw new Error("Analyze failed");
-  return await res.json();
+  if (!res.ok) {
+    throw new Error("Analyze failed");
+  }
+
+  return res.json();
 }
-
-// SESSION_ID
-export const sessionId =
-  localStorage.getItem("codesage_session") ??
-  (() => {
-    const id = crypto.randomUUID();
-    localStorage.setItem("codesage_session", id);
-    return id;
-  })();
-
 
 // =======================
 // VERSION HISTORY (GET)
 // =======================
 export async function getVersionHistory() {
-  const res = await fetch(VERSIONS_URL);
-  if (!res.ok) return [];
+  const res = await fetch(`${BASE_URL}/server/versions`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch version history");
+  }
+
   const data = await res.json();
   return data.versions ?? [];
 }
@@ -43,20 +36,15 @@ export async function getVersionHistory() {
 // SAVE VERSION (POST)
 // =======================
 export async function saveVersion(snapshot) {
-  const res = await fetch(`${VERSIONS_URL}/save`, {
+  const res = await fetch(`${BASE_URL}/server/versions`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      session_id: sessionId,
-      ...snapshot,
-    }),
+    body: JSON.stringify(snapshot),
   });
 
-  if (!res.ok) throw new Error("Save version failed");
+  if (!res.ok) {
+    throw new Error("Save version failed");
+  }
+
   return res.json();
 }
-
-
-
-
-
