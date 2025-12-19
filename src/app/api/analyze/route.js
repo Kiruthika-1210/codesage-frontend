@@ -10,7 +10,6 @@ export async function POST(req) {
       );
     }
 
-    // CALL CATALYST FUNCTION
     const catalystRes = await fetch(
       "https://codesage-ai-code-analyzer-909292301.development.catalystserverless.com/server/analyze/",
       {
