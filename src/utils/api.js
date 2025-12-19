@@ -1,19 +1,20 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const ANALYZE_URL =
+  "https://909292301.catalystserverless.in/serverless/analyze";
+
+const VERSIONS_URL =
+  "https://909292301.catalystserverless.in/serverless/versions";
 
 // =======================
 // ANALYZE CODE
 // =======================
 export async function analyzeCode(code) {
-  const res = await fetch(`${BASE_URL}/analyze`, {
+  const res = await fetch(ANALYZE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ code }),
   });
 
-  if (!res.ok) {
-    throw new Error("Analyze failed");
-  }
-
+  if (!res.ok) throw new Error("Analyze failed");
   return await res.json();
 }
 
@@ -21,31 +22,27 @@ export async function analyzeCode(code) {
 // VERSION HISTORY (GET)
 // =======================
 export async function getVersionHistory() {
-  const res = await fetch(`${BASE_URL}/versions`, {
-    method: "GET",
-  });
-
-  if (!res.ok) {
-    return [];
-  }
-
+  const res = await fetch(`${VERSIONS_URL}/${sessionId}`);
+  if (!res.ok) return [];
   const data = await res.json();
-  return data.versions ?? [];
+  return data.history ?? [];
 }
+
 
 // =======================
 // SAVE VERSION (POST)
 // =======================
-export async function saveVersion({ code, analysis }) {
-  const res = await fetch(`${BASE_URL}/versions`, {
+export async function saveVersion(snapshot) {
+  const res = await fetch(`${VERSIONS_URL}/save`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ code, analysis }),
+    body: JSON.stringify({
+      session_id: sessionId,
+      ...snapshot,
+    }),
   });
 
-  if (!res.ok) {
-    throw new Error("Save version failed");
-  }
-
-  return await res.json();
+  if (!res.ok) throw new Error("Save version failed");
+  return res.json();
 }
+
