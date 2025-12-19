@@ -108,15 +108,15 @@ function ScorePanel({ data }) {
       <div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-400">Final Score</span>
-          <span className={`font-bold text-lg ${getTextColor(data.finalScore)}`}>
-            {data.finalScore}/100
+          <span className={`font-bold text-lg ${getTextColor(data.qualityScore)}`}>
+            {data.qualityScore}/100
           </span>
         </div>
 
         <div className="w-full h-5 rounded-full bg-[#1a1a1d] overflow-hidden">
           <div
-            className={`h-full ${getBarColor(data.finalScore)}`}
-            style={{ width: `${data.finalScore}%` }}
+            className={`h-full ${getBarColor(data.qualityScore)}`}
+            style={{ width: `${data.qualityScore}%` }}
           />
         </div>
       </div>
@@ -126,3 +126,4 @@ function ScorePanel({ data }) {
 }
 
 export default ScorePanel;
+
